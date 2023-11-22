@@ -42,10 +42,8 @@ if (two[0] == '-' && one[0] != '-') {
     two = two.erase(0, 1);
     addMinus = true;
 }
-
 int i = one.length() - 1;
 int j = two.length() - 1;
-
 while (i >= 0 || j >= 0 || helper) {
     int sum = helper;
     if (i >= 0) {
@@ -68,12 +66,23 @@ string vychitanie(string one, string two) {
     int helper = 0;
     string result = "";
     bool addMinus = false;
-
     if (checking(one, two) == 2) {
+            if(one[0] == '-' && two[0] == '-'){
+                    two = two.erase(0, 1);
+                    one = one.erase(0, 1);
+                    result = vychitanie(two, one);
+                    return result;
+            }
         result = vychitanie(two, one);
         result = "-" + result;
         return result;
     }
+    if(checking(one, two) == 1){
+                    two = two.erase(0, 1);
+                    one = one.erase(0, 1);
+                result = vychitanie(two,one);
+                return result;
+            }
 
     if (one[0] == '-' && two[0] != '-') {
         one = one.erase(0, 1);
@@ -85,11 +94,10 @@ string vychitanie(string one, string two) {
         result = summa(one, two);
         return result;
     } else if (one[0] == '-' && two[0] == '-') {
-        one = one.erase(0, 1);
         two = two.erase(0, 1);
-        addMinus = false;
+        one = one.erase(0, 1);
+        addMinus = true;
     }
-
     while (one.length() < two.length()) {
         one = "0" + one;
     }
@@ -113,12 +121,11 @@ string vychitanie(string one, string two) {
         return "0";
     }
     if (addMinus) {
-        if (result[0] == '-' && result[1] == '-') {
-            result.erase(0, 1);
-        } else {
-            result = "-" + result;
-        }
+            if (result[0] == '-' && result[1] == '-') {
+        result = result.erase(0, 1);
     }
+    result = "-" + result;
+}
     return result;
 }
 string calculating(string one, string two, int sign) {
