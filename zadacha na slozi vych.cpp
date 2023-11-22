@@ -24,48 +24,12 @@ int checking(string one, string two) {
         }
     }
 }
-string summa(string one, string two) {
-    int helper = 0;
-    string result = "";
-    bool addMinus = false;
 
-if (two[0] == '-' && one[0] != '-') {
-    two = two.erase(0, 1);
-    result = vychitanie(one, two);
-    return result;
-} else if (one[0] == '-' && two[0] != '-') {
-    one = one.erase(0, 1);
-    result = vychitanie(two, one);
-    return result;
-} else if (one[0] == '-' && two[0] == '-') {
-    one = one.erase(0, 1);
-    two = two.erase(0, 1);
-    addMinus = true;
-}
-int i = one.length() - 1;
-int j = two.length() - 1;
-while (i >= 0 || j >= 0 || helper) {
-    int sum = helper;
-    if (i >= 0) {
-        sum += one[i] - '0';
-        i--;
-    }
-    if (j >= 0) {
-        sum += two[j] - '0';
-        j--;
-    }
-    helper = sum / 10;
-    result = to_string(sum % 10) + result;
-}
-if (addMinus) {
-    result = "-" + result;
-}
-return result;
-}
 string vychitanie(string one, string two) {
     int helper = 0;
     string result = "";
     bool addMinus = false;
+
     if (checking(one, two) == 2) {
             if(one[0] == '-' && two[0] == '-'){
                     two = two.erase(0, 1);
@@ -77,12 +41,6 @@ string vychitanie(string one, string two) {
         result = "-" + result;
         return result;
     }
-    if(checking(one, two) == 1){
-                    two = two.erase(0, 1);
-                    one = one.erase(0, 1);
-                result = vychitanie(two,one);
-                return result;
-            }
 
     if (one[0] == '-' && two[0] != '-') {
         one = one.erase(0, 1);
@@ -94,10 +52,11 @@ string vychitanie(string one, string two) {
         result = summa(one, two);
         return result;
     } else if (one[0] == '-' && two[0] == '-') {
-        two = two.erase(0, 1);
         one = one.erase(0, 1);
-        addMinus = true;
+        two = two.erase(0, 1);
+        addMinus = false;
     }
+
     while (one.length() < two.length()) {
         one = "0" + one;
     }
@@ -121,24 +80,68 @@ string vychitanie(string one, string two) {
         return "0";
     }
     if (addMinus) {
-            if (result[0] == '-' && result[1] == '-') {
-        result = result.erase(0, 1);
+        if (result[0] == '-' && result[1] == '-') {
+            result.erase(0, 1);
+        } else {
+            result = "-" + result;
+        }
     }
-    result = "-" + result;
-}
     return result;
 }
-string calculating(string one, string two, int sign) {
-    if (sign == 1) {
-        return summa(one, two);
-    } else if (sign == 2) {
-       return vychitanie(one, two);
+
+
+string summa(string one, string two) {
+    int helper = 0;
+    string result = "";
+    bool addMinus = false;
+
+    if (two[0] == '-' && one[0] != '-') {
+        two = two.erase(0, 1);
+        result = vychitanie(one, two);
+        return result;
+    } else if (one[0] == '-' && two[0] != '-') {
+        one = one.erase(0, 1);
+        result = vychitanie(two, one);
+        return result;
+    } else if (one[0] == '-' && two[0] == '-') {
+        one = one.erase(0, 1);
+        two = two.erase(0, 1);
+        addMinus = true;
+    }
+
+    int i = one.length() - 1;
+    int j = two.length() - 1;
+
+    while (i >= 0 || j >= 0 || helper) {
+        int sum = helper;
+        if (i >= 0) {
+            sum += one[i] - '0';
+            i--;
+        }
+        if (j >= 0) {
+            sum += two[j] - '0';
+            j--;
+        }
+        helper = sum / 10;
+        result = to_string(sum % 10) + result;
+    }
+    if (addMinus) {
+        result = "-" + result;
+    }
+    return result;
+}
+
+void calculating(string one, string two, string sign) {
+    if (sign == "1") {
+        cout << summa(one, two);
+    } else if (sign == "2") {
+        cout << vychitanie(one, two);
     }
 }
+
 int main() {
-    string a,b;
-    int c;
-    cin>>a>>b>>c;
-    cout<<calculating(a,b,c);
+    string one, two, sign;
+    cin >> one>>two>>sign;
+    calculating(one, two, sign);
     return 0;
 }
